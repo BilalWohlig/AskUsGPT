@@ -474,45 +474,48 @@ class GptService {
       )
     
 const prompt = `
-      You are given a list of restricted topics (previously generated or related content). For each item in the filtered list (which represents trends), generate one short, **specific** topic (maximum 2-3 words) that clearly represents the main point of the item. **Do not generate a topic** if it has any relation to the restricted topics in terms of meaning, context, or keywords.
-      Restricted topics:
-      ${dbTopics.join(', ') || 'None'}
-      
-      Filtered topics:
-      ${filteredTopics.join('\n')}
-      
-      Instructions:
-      1. For each filtered topic:
-         - **Step 1: Language Check**
-            - Check if the language of the topic is English.
-               - If the topic is **not in English**, **skip generating that topic**.
-               - If the topic is already **in English**, proceed to the next steps.
-         
-         - **Step 2: Overlap Evaluation**
-            - Carefully compare the topic against each restricted topic.
-            - Identify any **direct or indirect overlap** in meaning, context, or keywords with the restricted topics.
-            - If the filtered topic **is related in any way** to any restricted topic, skip it and **do not generate a short topic** for it.
-         
-         - **Step 3: Topic Generation**
-            - If the filtered topic is **not related** to any restricted topics:
-               - Identify the main concept or key idea of the topic.
-               - Generate a short, specific topic (maximum 2 words) that captures the core idea of the filtered topic.
-               - If the generated topic seems unrecognizable or odd in 2 words, then extend it to **3 words**.
-               - Ensure the short topic does **not relate** to any restricted topics in terms of meaning or keywords.
-      
-      2. The generated short topic should be:
-         - Precise, concise, and free of unnecessary characters like punctuation or special symbols.
-         - Unique, and must not repeat any previous topics.
-      
-      3. Only provide the topics in the response, without additional explanations or reasoning.
-      
-      4. Ensure all generated content is clean, well-structured, and free of extraneous characters such as newlines, asterisks, or extra spaces. The formatting must be clear and professional.
-      
-      5. **Note**: Only skip generating a topic if there is a **clear and significant overlap** with the restricted topics or if the language is not English. If there is no significant overlap and the language is English, proceed with generating a short, specific topic.
-      
-      6. If all filtered topics are related to restricted topics or not in English, provide **'No response'**.
+    You are a short topic generator tasked with creating unique, specific topics (2-3 words) based on a list of filtered trends. Ensure no generated topic is related in any way to restricted topics, and avoid duplicating any previously generated topics or do not create topics that is related to the context of restricted topics.
 
-      7. **Footer**: Include the generated topics at the end of your response in a clean, formatted manner.
+    **Restricted topics**:
+    ${dbTopics.join(', ') || 'None'}
+    
+    **Filtered topics**:
+    ${filteredTopics.join('\n')}
+    
+    **Instructions**:
+    
+    1. **Language Check**
+       - Verify if each filtered topic is in English.
+       - If it is not in English, skip it and do not generate a short topic for it.
+
+    2. **Strict Overlap Evaluation**
+       - Thoroughly examine each filtered topic against all restricted topics.
+       - If there is any direct or indirect overlap in meaning, context, keywords, or subject matter with restricted topics, skip it and do not generate a topic.
+    
+    3. **Short Topic Generation**
+       - For filtered topics that are unrelated to any restricted topics:
+          - Identify the core idea and generate a concise, specific topic (2-3 words).
+          - Ensure each generated topic is distinct and does not repeat or resemble any previously generated topics.
+
+    4. **Unique, Clear Formatting**
+       - Reponse should be in JSON format, ensuring each topic is precise and free of extraneous characters.The format should be as follows:
+        "
+        {
+          "topics": [
+           "Unique Topic 1",
+           "Unique Topic 2",
+           "Unique Topic 3",
+           ...
+          ]
+         }
+          "
+       - Avoid punctuation, special symbols, or redundant spaces.
+
+    5. **Exclusions**
+       - Skip generating a topic if there is a significant overlap with restricted topics or if the language is not English.
+       - If all filtered topics are restricted or non-English, respond with **"No response"**.
+
+    Only provide the topics in JSON format without additional explanations. Make sure no generated topics are similar to restricted topics or previously generated topics.
 `;
 
 
@@ -530,12 +533,8 @@ const prompt = `
          messages : [
           { 
             role: "system",
-            content: "You are a helpful assistant."
-          },
-          {
-            role: "user",
             content: prompt
-          }
+          },
         ],   
           max_tokens: 150
         })
@@ -543,13 +542,23 @@ const prompt = `
       let titles
       let finalData
       if(response && !response.choices[0].message.content.trim().includes('No response')){
-        titles = response.choices[0].message.content.trim()
-        finalData=titles.split(",")
+        if(response.choices[0].message.content && response.choices[0].message.content.trim().includes('`')){
+          titles = response.choices[0].message.content.trim().replace(/`/g,"")
+        }
+          if(titles && titles.includes('json')){
+            titles = titles.replace('json','') || response.choices[0].message.content.trim().replace('json',g,"")
+          }
+          
+         titles = titles || response.choices[0].message.content
+        let parsedResponse = JSON.parse(titles)
+        if (typeof parsedResponse === 'string') {
+          parsedResponse = JSON.parse(parsedResponse)
+        }
+        finalData=parsedResponse.topics
         return finalData
       }
       else
         titles=""
-      
       return titles
   }catch(error){
     console.log("Error while getting Trending topics",error)
