@@ -3,7 +3,9 @@ const router = express.Router()
 const __constants = require('../../../config/constants')
 const validationOfAPI = require('../../../middlewares/validation')
 // const cache = require('../../../middlewares/requestCacheMiddleware')
-const AlgoliaService = require('../../../services/algolia/AlgoliaService')
+const BudgetService = require('../../../services/budget/budgetService')
+const multer = require('multer')
+  const upload = multer()
 
 /**
  * @namespace -GNEWS-MODULE-
@@ -27,29 +29,17 @@ const validationSchema = {
   type: 'object',
   required: true,
   properties: {
-    page: {
-      type: 'number',
-      required: true
-    },
-    userId: {
-      type: 'string',
-      required: true
-    },
-    language: {
-      type: 'string',
-      required: true
-    }
   }
 }
 const validation = (req, res, next) => {
   return validationOfAPI(req, res, next, validationSchema, 'body')
 }
-const algoliaSearchQuery = async (req, res) => {
+const pushDocumentsToPinecone = async (req, res) => {
   try {
-    const result = await AlgoliaService.searchQueryAlgolia(req.body.searchData, req.body.page, req.body.language, req.body.userId, req.body.blockedSources, req.body.categories, req.body.isVideo, req.body.viewedNews, req.body.todayNews)
+    const result = await BudgetService.pushDocumentsToPinecone(req.files)
     res.sendJson({ type: __constants.RESPONSE_MESSAGES.SUCCESS, data: result })
   } catch (err) {
-    console.log('algoliaSearchQuery Error', err)
+    console.log('pushDocumentsToPinecone Error', err)
     return res.sendJson({
       type: err.type || __constants.RESPONSE_MESSAGES.SERVER_ERROR,
       err: err.err || err
@@ -57,5 +47,5 @@ const algoliaSearchQuery = async (req, res) => {
   }
 }
 
-router.post('/algoliaSearchQuery', validation, algoliaSearchQuery)
+router.post('/pushDocumentsToPinecone', upload.array('files'), validation, pushDocumentsToPinecone)
 module.exports = router
