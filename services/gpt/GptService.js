@@ -17,18 +17,18 @@ class GptService {
       model: 'gpt-4o-mini',
       messages: [
         {
-          role: "system",
+          role: 'system',
           content:
-            "Analyze the news title provided and determine if it constitutes a news digest. A news digest is characterized by a phrase that suggests a compilation of recent news, followed by mentions of multiple, distinct, and unrelated news stories. To assess this, look for an introductory phrase like 'Digest,' 'Briefing,' 'Top Stories,' 'Morning/Evening/Afternoon Digest,' or similar terms indicating a compilation. Verify that the title includes at least two summaries of news items that are not topically related to each other. Respond with 'Yes' if the title meets these criteria (i.e., it mentions multiple unrelated news summaries); otherwise, respond with 'No' (i.e., it covers a single topic or related topics). Provide a clear 'Yes' or 'No' answer based on these criteria. Here are examples of titles that meet these criteria: - 'News18 Afternoon Digest: Sam Pitroda In Soup Again; Modi Says India Will Not Tolerate And More Top Stories' - 'Morning briefing: Another Cong leader questions Poonch attack; Google ex-AI chief praises Microsoft's Nadella, and more' - 'News18 Evening Digest: SC Stays Calcultta HC's Order on Teacher's Recruitment, Kejriwal Interim Bail Plea' - 'Afternoon brief: KL Sharma on why Rahul Gandhi lost to Smriti Irani in 2019; US to India on Nijjar's killing, and more'",
+            "Analyze the news title provided and determine if it constitutes a news digest. A news digest is characterized by a phrase that suggests a compilation of recent news, followed by mentions of multiple, distinct, and unrelated news stories. To assess this, look for an introductory phrase like 'Digest,' 'Briefing,' 'Top Stories,' 'Morning/Evening/Afternoon Digest,' or similar terms indicating a compilation. Verify that the title includes at least two summaries of news items that are not topically related to each other. Respond with 'Yes' if the title meets these criteria (i.e., it mentions multiple unrelated news summaries); otherwise, respond with 'No' (i.e., it covers a single topic or related topics). Provide a clear 'Yes' or 'No' answer based on these criteria. Here are examples of titles that meet these criteria: - 'News18 Afternoon Digest: Sam Pitroda In Soup Again; Modi Says India Will Not Tolerate And More Top Stories' - 'Morning briefing: Another Cong leader questions Poonch attack; Google ex-AI chief praises Microsoft's Nadella, and more' - 'News18 Evening Digest: SC Stays Calcultta HC's Order on Teacher's Recruitment, Kejriwal Interim Bail Plea' - 'Afternoon brief: KL Sharma on why Rahul Gandhi lost to Smriti Irani in 2019; US to India on Nijjar's killing, and more'"
         },
         {
-          role: "user",
-          content: `This is the content of the article title: ${gnewsTitle}`,
+          role: 'user',
+          content: `This is the content of the article title: ${gnewsTitle}`
         },
         {
-          role: "assistant",
-          content: "Answer: ",
-        },
+          role: 'assistant',
+          content: 'Answer: '
+        }
       ],
       temperature: 0,
       max_tokens: 256,
@@ -36,7 +36,7 @@ class GptService {
       frequency_penalty: 0,
       presence_penalty: 0
     })
-    return response;
+    return response
   }
 
   async getAnsFromGPT(context, question) {
@@ -45,17 +45,17 @@ class GptService {
       model: 'gpt-4o-mini',
       messages: [
         {
-          role: "system",
-          content: `Your name is AskUs and you are a helpful chatbot. AskUs answers any question within the scope of the below news article. If the question is outside the scope of the news article, AskUs will respond with "I apologize, but I am unable to provide a response at this time as I do not possess the necessary information. Please ask a question related to this news article. Is there anything else I can assist you with?". If the user acknowledges the answer or writes any form of 'okay' slang, AskUs will respond with 👍. Do not generate questions and answers on your own. This is the context of the article: ${context}`,
+          role: 'system',
+          content: `Your name is AskUs and you are a helpful chatbot. AskUs answers any question within the scope of the below news article. If the question is outside the scope of the news article, AskUs will respond with "I apologize, but I am unable to provide a response at this time as I do not possess the necessary information. Please ask a question related to this news article. Is there anything else I can assist you with?". If the user acknowledges the answer or writes any form of 'okay' slang, AskUs will respond with 👍. Do not generate questions and answers on your own. This is the context of the article: ${context}`
         },
         {
-          role: "user",
-          content: `Question: ${question}`,
+          role: 'user',
+          content: `Question: ${question}`
         },
         {
-          role: "assistant",
-          content: "Answer: ",
-        },
+          role: 'assistant',
+          content: 'Answer: '
+        }
       ],
       temperature: 0,
       max_tokens: 256,
@@ -63,10 +63,8 @@ class GptService {
       frequency_penalty: 0,
       presence_penalty: 0
     })
-    return response;
+    return response
   }
-
-
 
 
   async getContentFromGPT(context, language, type, trends, max_tokens = 2000, model = "gpt-4o-mini") {
@@ -131,12 +129,12 @@ class GptService {
       console.log("trends", trends)
       const messages = [
         {
-          role: "system",
+          role: 'system',
           content:
             'You are a helpful assistant. First give the summary, label it as "Summary:", then the headline, label it as "Headline:" then the tweet, label it as "Tweet:", then the tags, label it as "Tags:", then the bullet points, label it as "Bullets:", then similarity scores, label them as "Similarities:" and finally suggested question and answer, label them as "SuggestedQnA". Ensure the "SuggestedQnA" section follows this format: "1. question1? answer1. 2. question2? answer2. 3. question3? answer3."',
         },
         {
-          role: "user",
+          role: 'user',
           content: `${context}
         1. Provide a summary of the key points from the article above strictly in ${language} language. The summary should be 80-100 words in length. Focus on capturing the main ideas and key details in a clear and concise way. Summarize the essence of the article accurately regardless of its length.
         2. Create a headline in under 20 words for the summary strictly in ${language} language.
@@ -167,14 +165,11 @@ class GptService {
       const result = parsedResponse.choices[0].message;
 
       return { result, usage };
-
     } catch (error) {
-      console.error("Error in getContentFromGPT", error);
-      return error;
+      console.error('Error in getContentFromGPT', error)
+      return error
     }
   }
-
-
 
   async getAdvancedClassificationGPT(summary, headline, updatedCategories) {
     console.log("Sending Summary & Headline to GPT");
@@ -182,12 +177,12 @@ class GptService {
     try {
       const messages = [
         {
-          role: "system",
+          role: 'system',
           content:
-            'You are a helpful assistant. First give the categories, label it as "Categories:", then the sentiment, label it as "Sentiment:" and finally the Advanced Sentiment, label it as "AdvancedSentiment:".',
+            'You are a helpful assistant. First give the categories, label it as "Categories:", then the sentiment, label it as "Sentiment:" and finally the Advanced Sentiment, label it as "AdvancedSentiment:".'
         },
         {
-          role: "user",
+          role: 'user',
           content: `Summary: ${summary}
           Headline: ${headline}
           1. Analyze the provided summary and headline and categorize it using the following predefined categories. Each article may have multiple assigned categories, but ensure that all assigned categories are selected from the list below. Do not include any new categories that are not part of the provided list. The category 'nation' provided below pertains to news about India. The category 'advertisement' provided below pertains to any news that promotes the sale, discounts, features, price of any product be it a car, or a technology device, etc. Also, news related to games will come under 'advertisement' category. Provide only the category names in lowercase format and in a single line, removing any preceding numbers.
@@ -264,18 +259,18 @@ class GptService {
       model: 'gpt-4o-mini',
       messages: [
         {
-          role: "system",
-          content: "Answer the question based on the context below",
+          role: 'system',
+          content: 'Answer the question based on the context below'
         },
         {
-          role: "user",
+          role: 'user',
           content: `Context: ${context}
-                    Question: ${question}`,
+                    Question: ${question}`
         },
         {
-          role: "assistant",
-          content: "Answer: ",
-        },
+          role: 'assistant',
+          content: 'Answer: '
+        }
       ],
       temperature: 0,
       max_tokens: 256,
@@ -283,19 +278,19 @@ class GptService {
       frequency_penalty: 0,
       presence_penalty: 0
     })
-    return response;
+    return response
   }
 
-  async getFullContentGPT(transcript, language) {
-    console.log("Generating full content from GPT");
+  async getFullContentGPT (transcript, language) {
+    console.log('Generating full content from GPT')
     try {
       const messages = [
         {
-          role: "system",
-          content: `You are a helpful assistant. Give the Full Content in ${language} language and label it as "Full Content:".`,
+          role: 'system',
+          content: `You are a helpful assistant. Give the Full Content in ${language} language and label it as "Full Content:".`
         },
         {
-          role: "user",
+          role: 'user',
           content: `${transcript}
           Generate a news article for the above content`
         }
@@ -309,19 +304,22 @@ class GptService {
         frequency_penalty: 0,
         presence_penalty: 0
       })
-      return response;
+      return response
+      return response
     } catch (error) {
-      console.error("getFullContentGPT", error);
-      return error;
+      console.error('getFullContentGPT', error)
+      return error
+      console.error('getFullContentGPT', error)
+      return error
     }
   }
 
-  async adDetectorFineTunedModel(news) {
+  async adDetectorFineTunedModel (news) {
     try {
       const messages = [
         {
-          role: "system",
-          content: "You classify articles into news and ads",
+          role: 'system',
+          content: 'You classify articles into news and ads'
         },
         {
           role: 'user',
@@ -338,9 +336,9 @@ class GptService {
         frequency_penalty: 0,
         presence_penalty: 0
       })
-      return fineTunedModel;
+      return fineTunedModel
     } catch (error) {
-      console.error("Error in fineTunedModel", error);
+      console.error('Error in fineTunedModel', error)
     }
   }
 
@@ -350,7 +348,7 @@ class GptService {
       This is the context of the article:
       Actual News Content: ${newsFullContent}
       Related News Article: ${AllFullContent}
-      You can answer based on the actual news content, but you may also use the related news article for additional context.`;
+      You can answer based on the actual news content, but you may also use the related news article for additional context.`
 
       const myAssistant = await openai.beta.assistants.create({
         instructions,
@@ -361,9 +359,10 @@ class GptService {
       console.log("Assistant Created");
       return myAssistant;
     } catch (error) {
-      console.error("An error occurred during interaction:", error);
+      console.error('An error occurred during interaction:', error)
     }
   }
+
   // function to create a new thread
   async createThread() {
     try {
@@ -375,6 +374,7 @@ class GptService {
       console.log("Error creating ThreadId", error);
     }
   }
+
   // Fucntion to run the Assistant and get Answer
   async runAssistantAndGetResponse(assistantId, threadId, question, interval = 3000, maxAttempts = 15) {
     const userMessage = await openai.beta.threads.messages.create(threadId, {
@@ -407,10 +407,10 @@ class GptService {
     if (attempts === maxAttempts && runStatus !== "completed") {
       throw new Error("Run did not complete within the expected time frame.");
     }
-    const messages = await openai.beta.threads.messages.list(threadId);
-    const answerContents = messages.data.map(msg => msg.content);
-    const assistantResponse = answerContents[0];
-    return assistantResponse;
+    const messages = await openai.beta.threads.messages.list(threadId)
+    const answerContents = messages.data.map(msg => msg.content)
+    const assistantResponse = answerContents[0]
+    return assistantResponse
   }
   // Function to delete the Assistant 
   async deleteAssistant(deleteId) {
@@ -435,33 +435,65 @@ class GptService {
         })
       let filteredTopics = []
       topics.map(group => {
+      if(dbTopics.length>0){
         for(let item of dbTopics){
           if(!group.includes(item)){
               filteredTopics.push(group)
               break
         }
-        }}
+        }
+      }
+      else{
+        filteredTopics=topics
+      }
+    }
       )
-      const prompt = `
-      You are given a list of restricted topics (previously generated or related content). For each item in the filtered list, generate one short topic (maximum 2 words) **only if** it is **not** related in any way to the restricted topics. A topic is considered "related" if it overlaps in meaning, context, or keywords with any of the restricted topics.
-      
-      Restricted topics:
-      ${dbTopics.join(", ")}
-      
-      Filtered topics:
-      ${filteredTopics.join("\n")}
-      
-      Instructions:
-      1. Compare each filtered topic against the restricted topics.
-      2. If a filtered topic is related to any restricted topic in meaning, context, or content (even if it is partially related), skip it and **do not** generate a short topic for it.
-      3. If a filtered topic is **not** related to any restricted topics, generate one short topic (maximum 2 words).
-      4. Avoid all special characters like '**', '-', or any punctuation in the generated topics.
-      5. Ensure no duplicate topics are generated.
-      6. If **all** filtered topics are related to restricted topics, provide 'No response' in response.
-      7.Also check the short topic you are providing is related to any restricted topics
-      8.Ensure that all generated news content is entirely free of unnecessary characters such as \n, *, extra spaces, or any other extraneous symbols. The content must be precise, clean, and meticulously formatted to maintain a high standard of readability and professionalism. Every element should be concise and well-structured, leaving no room for any formatting errors or irrelevant details. 
-      `;
-  
+    
+const prompt = `
+    You are a short topic generator tasked with creating unique, specific topics (2-3 words) based on a list of filtered trends. Ensure no generated topic is related in any way to restricted topics, and avoid duplicating any previously generated topics or do not create topics that is related to the context of restricted topics.
+
+    **Restricted topics**:
+    ${dbTopics.join(', ') || 'None'}
+    
+    **Filtered topics**:
+    ${filteredTopics.join('\n')}
+    
+    **Instructions**:
+    
+    1. **Language Check**
+       - Verify if each filtered topic is in English.
+       - If it is not in English, skip it and do not generate a short topic for it.
+
+    2. **Strict Overlap Evaluation**
+       - Thoroughly examine each filtered topic against all restricted topics.
+       - If there is any direct or indirect overlap in meaning, context, keywords, or subject matter with restricted topics, skip it and do not generate a topic.
+    
+    3. **Short Topic Generation**
+       - For filtered topics that are unrelated to any restricted topics:
+          - Identify the core idea and generate a concise, specific topic (2-3 words).
+          - Ensure each generated topic is distinct and does not repeat or resemble any previously generated topics.
+
+    4. **Unique, Clear Formatting**
+       - Reponse should be in JSON format, ensuring each topic is precise and free of extraneous characters.The format should be as follows:
+        "
+        {
+          "topics": [
+           "Unique Topic 1",
+           "Unique Topic 2",
+           "Unique Topic 3",
+           ...
+          ]
+         }
+          "
+       - Avoid punctuation, special symbols, or redundant spaces.
+
+    5. **Exclusions**
+       - Skip generating a topic if there is a significant overlap with restricted topics or if the language is not English.
+       - If all filtered topics are restricted or non-English, respond with **"No response"**.
+
+    Only provide the topics in JSON format without additional explanations. Make sure no generated topics are similar to restricted topics or previously generated topics.
+`;
+
 
       const message = {
           role: "system",
@@ -474,12 +506,8 @@ class GptService {
          messages : [
           { 
             role: "system",
-            content: "You are a helpful assistant."
-          },
-          {
-            role: "user",
             content: prompt
-          }
+          },
         ],   
           max_tokens: 150
         })
@@ -487,13 +515,23 @@ class GptService {
       let titles
       let finalData
       if(response && !response.choices[0].message.content.trim().includes('No response')){
-        titles = response.choices[0].message.content.trim()
-        finalData=titles.split(",")
+        if(response.choices[0].message.content && response.choices[0].message.content.trim().includes('`')){
+          titles = response.choices[0].message.content.trim().replace(/`/g,"")
+        }
+          if(titles && titles.includes('json')){
+            titles = titles.replace('json','') || response.choices[0].message.content.trim().replace('json',g,"")
+          }
+          
+         titles = titles || response.choices[0].message.content
+        let parsedResponse = JSON.parse(titles)
+        if (typeof parsedResponse === 'string') {
+          parsedResponse = JSON.parse(parsedResponse)
+        }
+        finalData=parsedResponse.topics
         return finalData
       }
       else
         titles=""
-      
       return titles
   }catch(error){
     console.log("Error while getting Trending topics",error)

@@ -1,3 +1,4 @@
+
 const pdf_parse = require("pdf-parse");
 // const { CSVLoader } = require("@langchain/community/document_loaders/fs/csv");
 // const __constants = require("../../config/constants");
@@ -21,6 +22,7 @@ const { Pinecone } = require("@pinecone-database/pinecone");
 const pinecone = new Pinecone({
   apiKey: process.env.PINECONE_API_KEY2,
 });
+
 // const RagDocs = require("../../mongooseSchema/RagDocs");
 // const { compile } = require("html-to-text");
 // const {
@@ -67,6 +69,7 @@ class BudgetService {
           },
         ],
       });
+
       // summary template for creating useful insights as per the persona
       const summaryTemplate = `
         You are an expert in creating insights from national budget documents. Your goal is to create insights based on the persona provided. 
