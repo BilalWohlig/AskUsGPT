@@ -102,4 +102,5 @@ const getTrendingTopics = async (req, res) => {
 }
 router.post('/getTrendingTopics', getTrendingTopics)
 
+
 module.exports = router
