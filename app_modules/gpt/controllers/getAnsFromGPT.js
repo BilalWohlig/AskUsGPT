@@ -94,7 +94,7 @@ const deleteAssistant = async (req, res) => {
 router.post('/deleteAssistant', deleteAssistant)
 const getTrendingTopics = async (req, res) => {
   try {
-    const result = await gptServices.getTrendingTitlesFromGpt(req.body.stories, req.body.trendingData)
+    const result = await gptServices.getTrendingTopicsFromGpt(req.body.stories,req.body.dbTopic)
     res.json({ data: result })
   } catch (error) {
     console.log('Trending topics error', error)
