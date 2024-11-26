@@ -62,14 +62,4 @@ const getTrendingTopics = async (req, res) => {
 }
 router.post('/getTrendingTopics', getTrendingTopics)
 
-const getTrendingTopics = async (req, res) => {
-  try{
-    const result = await gptServices.getTrendingTitlesFromGpt(req.body.stories,req.body.trendingData);
-    res.json({data:result});
-  }catch(error){
-    console.log("Trending topics error", error);
-  }
-}
-router.post('/getTrendingTopics', getTrendingTopics);
-
 module.exports = router
