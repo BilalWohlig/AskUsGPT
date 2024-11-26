@@ -54,7 +54,7 @@ router.post('/getAnsFromGPT', cache.route(600), validation, getAnsFromGPT)
 
 const getTrendingTopics = async (req, res) => {
   try {
-    const result = await gptServices.getTrendingTitlesFromGpt(req.body.stories, req.body.trendingData)
+    const result = await gptServices.getTrendingTopicsFromGpt(req.body.stories, req.body.trendingData)
     res.json({ data: result })
   } catch (error) {
     console.log('Trending topics error', error)
