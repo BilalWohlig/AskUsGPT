@@ -530,10 +530,65 @@ const prompt = `
   }catch(error){
     console.log("Error while getting Trending topics",error)
   }}
-  
-async getTrendingTopicsFromGpt(headline, trendingData, interval = 3000, maxAttempts = 15) {
+  async getTrendingTopicsFromGpt(headline, trendingData, interval = 3000, maxAttempts = 15) {
     try {
-const prompt=`You are a short topic generator tasked with creating a unique, specific topic (2-3 words) based on the provided headline. Avoid duplicating any previously generated topics, and ensure the generated topic does not match restricted topics.
+// const prompt=`You are a short topic generator tasked with creating a unique, specific topic (2-3 words) based on the provided headline. Avoid duplicating any previously generated topics, and ensure the generated topic does not match restricted topics.
+
+// **Headline**:  
+// ${headline}
+
+// **Restricted topics**:  
+// ${trendingData}
+
+// **Instructions**:
+
+// 1. **Language Check**  
+//    - Verify if the headline is in English.  
+//    - If it is not in English, skip it and do not generate a topic.
+
+// 2. **Strict Overlap Evaluation**  
+//    - Thoroughly examine the headline against restricted topics.  
+//    - If there is any direct or indirect overlap in meaning, context, keywords, or subject matter with restricted topics, skip it and do not generate a topic.
+
+// 3. **Topic Generation**  
+//    - If the headline is unrelated to restricted topics:  
+//       - Identify the core idea and generate a concise, specific topic (2-3 words).  
+//       - Prefer 2 words where possible. If 2 words cannot fully represent the headline, use 3 words.  
+//       - Ensure the topic is distinct and does not match any of the restricted topics.
+
+// 4. **Output Requirements**  
+//    - Provide the generated topic as plain text without any additional text, formatting, or explanation.  
+//    - Avoid punctuation, special symbols, or redundant spaces.
+
+// 5. **Exclusions**  
+//    - Skip generating a topic if the headline is not in English or overlaps with restricted topics.  
+//    - If no valid topic can be created, respond with **"No response"**.
+
+// **Examples**:  
+// - **Headline**: "Government announces new healthcare reforms"  
+//   **Restricted topics**: "Healthcare Policies, Reform Bill"  
+//   **Generated Topic**: "Healthcare Reforms"  
+
+// - **Headline**: "India defeats Australia in World Cup finals"  
+//   **Restricted topics**: "Australia Loss, Cricket Finals"  
+//   **Generated Topic**: "India World Cup"  
+
+// - **Headline**: "Tesla unveils its first electric truck model"  
+//   **Restricted topics**: "Electric Vehicles, Tesla Truck"  
+//   **Generated Topic**: "Tesla Electric Truck"  
+
+// - **Headline**: "Apple releases the Vision Pro AR headset"  
+//   **Restricted topics**: "Apple AR, AR Headset"  
+//   **Generated Topic**: "Apple Vision Pro"  
+
+// - **Headline**: "जापान में भूकंप से भारी नुकसान"  
+//   **Restricted topics**: "Earthquake Damage"  
+//   **Generated Topic**: "No response"  
+
+// Only provide the generated topic as plain text. Ensure it is concise, relevant, adheres to the word limit guidelines, and does not match any restricted topic.
+// `
+let allowedLanguages=["English","Hindi"]
+const prompt = `You are a short topic generator tasked with creating a unique, specific topic (2-3 words) based on the provided headline. Avoid duplicating any previously generated topics, and ensure the generated topic does not match restricted topics.
 
 **Headline**:  
 ${headline}
@@ -541,18 +596,23 @@ ${headline}
 **Restricted topics**:  
 ${trendingData}
 
+**Allowed languages**:  
+${allowedLanguages}
+
 **Instructions**:
 
 1. **Language Check**  
-   - Verify if the headline is in English.  
-   - If it is not in English, skip it and do not generate a topic.
+   - Verify the language of the headline.  
+   - Use the \`allowedLanguages\` array to determine if the language is valid.  
+   - If the headline is not in one of the allowed languages, skip it and do not generate a topic.  
+   - Generate the topic in the same language as the headline.
 
 2. **Strict Overlap Evaluation**  
    - Thoroughly examine the headline against restricted topics.  
    - If there is any direct or indirect overlap in meaning, context, keywords, or subject matter with restricted topics, skip it and do not generate a topic.
 
 3. **Topic Generation**  
-   - If the headline is unrelated to restricted topics:  
+   - If the headline is unrelated to restricted topics and in an allowed language:  
       - Identify the core idea and generate a concise, specific topic (2-3 words).  
       - Prefer 2 words where possible. If 2 words cannot fully represent the headline, use 3 words.  
       - Ensure the topic is distinct and does not match any of the restricted topics.
@@ -562,7 +622,7 @@ ${trendingData}
    - Avoid punctuation, special symbols, or redundant spaces.
 
 5. **Exclusions**  
-   - Skip generating a topic if the headline is not in English or overlaps with restricted topics.  
+   - Skip generating a topic if the headline is not in an allowed language or overlaps with restricted topics.  
    - If no valid topic can be created, respond with **"No response"**.
 
 **Examples**:  
@@ -584,10 +644,11 @@ ${trendingData}
 
 - **Headline**: "जापान में भूकंप से भारी नुकसान"  
   **Restricted topics**: "Earthquake Damage"  
+  **Allowed languages**: "en, hi"  
   **Generated Topic**: "No response"  
 
-Only provide the generated topic as plain text. Ensure it is concise, relevant, adheres to the word limit guidelines, and does not match any restricted topic.
-`
+Only provide the generated topic as plain text. Ensure it is concise, relevant, adheres to the word limit guidelines, and does not match any restricted topic.`;
+
       const message = {
         role: "system",
         content: prompt
