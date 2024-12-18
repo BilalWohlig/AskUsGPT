@@ -587,7 +587,7 @@ const prompt = `
 
 // Only provide the generated topic as plain text. Ensure it is concise, relevant, adheres to the word limit guidelines, and does not match any restricted topic.
 // `
-let allowedLanguages=["English","Hindi"]
+let allowedLanguages=["English","Hindi","Gujarati"]
 const prompt = `You are a short topic generator tasked with creating a unique, specific topic (2-3 words) based on the provided headline. Avoid duplicating any previously generated topics, and ensure the generated topic does not match restricted topics.
 
 **Headline**:  
@@ -605,7 +605,7 @@ ${allowedLanguages}
    - Verify the language of the headline.  
    - Use the \`allowedLanguages\` array to determine if the language is valid.  
    - If the headline is not in one of the allowed languages, skip it and do not generate a topic.  
-   - Generate the topic in the same language as the headline.
+   - Generate the topic in the same language as the headline.For example , if the headline is in gujarati the generated topic must be in gujarati.
 
 2. **Strict Overlap Evaluation**  
    - Thoroughly examine the headline against restricted topics.  
