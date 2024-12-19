@@ -587,7 +587,69 @@ const prompt = `
 
 // Only provide the generated topic as plain text. Ensure it is concise, relevant, adheres to the word limit guidelines, and does not match any restricted topic.
 // `
-let allowedLanguages=["English","Hindi","Gujarati"]
+// let allowedLanguages=["English","Hindi","Gujarati","Punjabi","Tamil","Telugu"]
+// const prompt = `You are a short topic generator tasked with creating a unique, specific topic (2-3 words) based on the provided headline. Avoid duplicating any previously generated topics, and ensure the generated topic does not match restricted topics.
+
+// **Headline**:  
+// ${headline}
+
+// **Restricted topics**:  
+// ${trendingData}
+
+// **Allowed languages**:  
+// ${allowedLanguages}
+
+// **Instructions**:
+
+// 1. **Language Check**  
+//    - Verify the language of the headline.  
+//    - Use the \`allowedLanguages\` array to determine if the language is valid.  
+//    - If the headline is not in one of the allowed languages, skip it and do not generate a topic.  
+//    - Generate the topic in the same language as the headline.For example , if the headline is in gujarati the generated topic must be in gujarati.
+
+// 2. **Strict Overlap Evaluation**  
+//    - Thoroughly examine the headline against restricted topics.  
+//    - If there is any direct or indirect overlap in meaning, context, keywords, or subject matter with restricted topics, skip it and do not generate a topic.
+
+// 3. **Topic Generation**  
+//    - If the headline is unrelated to restricted topics and in an allowed language:  
+//       - Identify the core idea and generate a concise, specific topic (2-3 words).  
+//       - Prefer 2 words where possible. If 2 words cannot fully represent the headline, use 3 words.  
+//       - Ensure the topic is distinct and does not match any of the restricted topics.
+
+// 4. **Output Requirements**  
+//    - Provide the generated topic as plain text without any additional text, formatting, or explanation.  
+//    - Avoid punctuation, special symbols, or redundant spaces.
+
+// 5. **Exclusions**  
+//    - Skip generating a topic if the headline is not in an allowed language or overlaps with restricted topics.  
+//    - If no valid topic can be created, respond with **"No response"**.
+
+// **Examples**:  
+// - **Headline**: "Government announces new healthcare reforms"  
+//   **Restricted topics**: "Healthcare Policies, Reform Bill"  
+//   **Generated Topic**: "Healthcare Reforms"  
+
+// - **Headline**: "India defeats Australia in World Cup finals"  
+//   **Restricted topics**: "Australia Loss, Cricket Finals"  
+//   **Generated Topic**: "India World Cup"  
+
+// - **Headline**: "Tesla unveils its first electric truck model"  
+//   **Restricted topics**: "Electric Vehicles, Tesla Truck"  
+//   **Generated Topic**: "Tesla Electric Truck"  
+
+// - **Headline**: "Apple releases the Vision Pro AR headset"  
+//   **Restricted topics**: "Apple AR, AR Headset"  
+//   **Generated Topic**: "Apple Vision Pro"  
+
+// - **Headline**: "जापान में भूकंप से भारी नुकसान"  
+//   **Restricted topics**: "Earthquake Damage"  
+//   **Allowed languages**: "en, hi"  
+//   **Generated Topic**: "No response"  
+
+// Only provide the generated topic as plain text. Ensure it is concise, relevant, adheres to the word limit guidelines, and does not match any restricted topic.`;
+
+let allowedLanguages=["English","Hindi","Gujarati","Punjabi","Tamil","Telugu"];
 const prompt = `You are a short topic generator tasked with creating a unique, specific topic (2-3 words) based on the provided headline. Avoid duplicating any previously generated topics, and ensure the generated topic does not match restricted topics.
 
 **Headline**:  
@@ -605,7 +667,7 @@ ${allowedLanguages}
    - Verify the language of the headline.  
    - Use the \`allowedLanguages\` array to determine if the language is valid.  
    - If the headline is not in one of the allowed languages, skip it and do not generate a topic.  
-   - Generate the topic in the same language as the headline.For example , if the headline is in gujarati the generated topic must be in gujarati.
+   - Generate the topic in the same language as the headline. For example, if the headline is in Tamil, the generated topic must be in Tamil.
 
 2. **Strict Overlap Evaluation**  
    - Thoroughly examine the headline against restricted topics.  
@@ -644,8 +706,12 @@ ${allowedLanguages}
 
 - **Headline**: "जापान में भूकंप से भारी नुकसान"  
   **Restricted topics**: "Earthquake Damage"  
-  **Allowed languages**: "en, hi"  
+  **Allowed languages**: "English, Hindi, Gujarati, Tamil, Telugu, Punjabi"  
   **Generated Topic**: "No response"  
+
+- **Headline**: "ਪੰਜਾਬ ਵਿਚ ਵੱਡਾ ਕਿਸਾਨ ਪ੍ਰਦਰਸ਼ਨ"  
+  **Restricted topics**: "Farmers Protest"  
+  **Generated Topic**: "ਕਿਸਾਨ ਅੰਦੋਲਨ"  
 
 Only provide the generated topic as plain text. Ensure it is concise, relevant, adheres to the word limit guidelines, and does not match any restricted topic.`;
 
